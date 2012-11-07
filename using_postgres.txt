@@ -1,0 +1,43 @@
+ Postgres is like a Program on your computer as opposed to sqlite which is like a File on your computer.
+
+ Steps:
+ 1) Download Postgres: this is already available on ubuntu or putty/cygwin
+ 2) pip install psycopg2
+    a) figure out what this does!
+ 3) Turning Postgres on in the computer
+    a) Initialize database storage area on disk
+        initdb -D /Users/student/Fall2012/reverse_search/reverse_search_engine/ratings/postgres/data
+    b) Starting program on computer: (will also log errors to logfile in the folder)
+        pg_ctl start -D /Users/student/Fall2012/reverse_search/reverse_search_engine/ratings/postgres/data -l /Users/student/Fall2012/reverse_search/reverse_search_engine/ratings/postgres/logfile
+    c) Commands:
+        'jobs' checks what things are running
+        'fg 1' if postgres is job 1, it will bring it to the front
+        'ctrl-Z' leaves the job 1
+        'bg 1' sends job 1 to the background
+    d) Stopping:
+        pg_ctl stop -D /Users/student/Fall2012/reverse_search/reverse_search_engine/ratings/postgres/data
+4) Creating Database
+    dropdb mydb
+
+
+
+python -i model.py
+
+engine = create_engine('postgresql://localhost/search_engine')
+
+Base.metadata.create_all(engine)
+ --> this gave an error. Need to make the database inside of Postgres first!
+
+Using Postgress.app on Mac
+
+1) Download: http://postgresapp.com/
+2) psql -h localhost
+3) CREATE DATABASE search_engine
+4)
+
+
+
+
+
+
+
