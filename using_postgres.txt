@@ -32,8 +32,8 @@ Using Postgress.app on Mac
 
 1) Download: http://postgresapp.com/
 2) psql -h localhost
-3) CREATE DATABASE search_engine
-4)
+3) CREATE DATABASE search_engine;
+4) DROP DATABASE search_engine;
 
 
 
