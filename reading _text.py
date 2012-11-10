@@ -19,9 +19,13 @@ def main():
 
 def check_dictionary_line(line, common_words):
     word_list = line.split()
+    for i in range(len(word_list)):
+        if word_list[0] not in common_words:
+            ch
+
     for each_word in word_list:
         if each_word not in common_words:
-            return word_list
+            line.append(word_list)   
 
 word_list = [] 
 
