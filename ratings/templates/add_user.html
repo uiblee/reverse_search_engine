@@ -9,8 +9,6 @@
     <tr><td><input type="submit"></td></tr>
     </table>
 </form>
-
-
     <h2>Register account</h2>
     <form action="{{url_for ('add_user')}}" method="POST">
     <table>
@@ -19,4 +17,13 @@
     <tr><td><input type="submit" value="sign up"></td></tr>
 </table>
 </form>
+
+<ul class="nav pull-left">
+    {% if not session.logged_in %}
+    <li><a href="/facebook_login">Login or Signup with Facebook</a></li>
+    {% else %}
+    <li><a href="/logout">Logout</a></li>
+    {% endif %}
+</ul>
+
 {% endblock %}    
