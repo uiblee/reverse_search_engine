@@ -1,29 +1,27 @@
 {% extends "layout.html" %}
 {% block body %}
+<!--<style type="text/css">
+       body {
+        background:url('static/images/coral.jpg') no-repeat center center fixed;
+        opacity: 5%;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size:cover;
+    } 
+</style> -->
+    <form action="{{url_for('authenticate')}}" method="POST" class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="text" class="input-block-level" placeholder="Username" name="username">
+        <input type="password" class="input-block-level" placeholder="Password" name="password">
+        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+    </form>
 
-    <h2>Log In</h2>
-    <form action="{{url_for('authenticate')}}" method="POST">
-    <table>
-    <tr><td>Username: </td><td><input type="text" name="username"></td></tr>
-    <tr><td>Password: </td><td><input type="password" name="password"></td></tr>
-    <tr><td><input type="submit"></td></tr>
-    </table>
-</form>
-    <h2>Register account</h2>
-    <form action="{{url_for ('add_user')}}" method="POST">
-    <table>
-    <tr><td>Username: </td><td><input type="text" name="username"></td></tr>
-    <tr><td>Password: </td><td><input type="password" name="password"></td></tr>
-    <tr><td><input type="submit" value="sign up"></td></tr>
-</table>
-</form>
-
-<ul class="nav pull-left">
-    {% if not session.logged_in %}
-    <li><a href="/facebook_login">Login or Signup with Facebook</a></li>
-    {% else %}
-    <li><a href="/logout">Logout</a></li>
-    {% endif %}
-</ul>
+    <form action="{{url_for('add_user')}}" method="POST" class="form-signin">
+        <h2 class="form-signin-heading">Sign up</h2>
+        <input type="text" class="input-block-level" placeholder="Username" name="username">
+        <input type="password" class="input-block-level" placeholder="Password" name="password">
+        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+    </form>
 
 {% endblock %}    

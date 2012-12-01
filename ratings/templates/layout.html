@@ -1,36 +1,27 @@
 <! DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <meta charset="utf-8">
         <title> Reverse Search Engine </title>
         <link rel= "stylesheet" href="/static/css/bootstrap.css" type="text/css">
+        <link rel= "stylesheet" href="/static/css/custom.css" type="text/css">
     </head>
     
     <body>
-    <div id="fb-root"></div>
-<script>
-  window.fbAsyncInit = function() {
-    // init the FB JS SDK
-    FB.init({
-      appId      : '103699949794696', // App ID from the App Dashboard
-      channelUrl : 'http://localhost:5000/', // Channel File for x-domain communication
-      status     : true, // check the login status upon init?
-      cookie     : true, // set sessions cookies to allow your server to access the session?
-      xfbml      : true  // parse XFBML tags on this page?
-    });
-
-    // Additional initialization code such as adding Event Listeners goes here
-
-  };
-
-  // Load the SDK's source Asynchronously
-  (function(d, debug){
-     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement('script'); js.id = id; js.async = true;
-     js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
-     ref.parentNode.insertBefore(js, ref);
-   }(document, /*debug*/ false));
-</script>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul class="nav">
+                    <li class="active">
+                        <a class="brand" href="#">reverse search</a>
+                    </li>
+                    <li><a href="/about">about</a></li>
+                    <li><a href="/view_user_profile">your account</a></li>
+                    <li><a href="/logout">logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
         <h1>Reverse Search Engine</h1>
         <div class="container">
         {% block body %}{% endblock %}

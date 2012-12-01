@@ -1,6 +1,7 @@
 <html>
-    <form method="POST" action="{{url_for("receive_names")}}">
+    <form method="POST" action="{{url_for("receive_names", user_id=user_id)}}">
         <input name="list_of_names" type="text">
         <input type="submit">
     </form>
 </html>
+
