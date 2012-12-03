@@ -11,7 +11,7 @@ from apiclient.discovery import build_from_document, build
 import httplib2
 import random
 from oauth2client.client import OAuth2WebServerFlow
-
+from gdata.gauth import ClientLoginToken
 import atom.data
 import gdata.data
 import gdata.contacts.client
@@ -40,11 +40,12 @@ def google_login():
     auth_uri = flow.step1_get_authorize_url()
     return redirect(auth_uri)
 
-@app.route('/google_signout')
-def signout():
+@app.route('/google_logout')
+def google_logout():
     del session['credentials']
     session['message'] = "You have logged out"
-    return redirect(url_for("log_in"))
+    user_id = session['user_id']
+    return render_template("view_user_profile.html", user_id=user_id)
 
 @app.route('/oauth2callback')
 def oauth2callback():
@@ -59,19 +60,21 @@ def oauth2callback():
         except Exception as e:
             print "Unable to get an access token because ", e.message
         session['credentials'] = credentials
+        credentials.authorize(httplib2.Http())
         user_id = session['user_id']
         user = db_session.query(User).get(user_id)
-        user.google_token = credentials.access_token
+        user.google_token = credentials.refresh_token
         db_session.commit()
     return redirect(url_for('google_contacts'))
 
 @app.route('/google_contacts')
 def google_contacts():
     user_id = session['user_id']
-    google_token = db_session.query(User).get(user_id).google_token
+    google_token = ClientLoginToken(db_session.query(User).get(user_id).google_token)
     gd_client = gdata.contacts.client.ContactsClient(auth_token=google_token, 
         source='<var>reverse_search</var>')
-    feed = gd_client.get_contacts(desired_class=gdata.contacts.data.ContactsFeed)
+    feed = gd_client.get_contacts(desired_class=gdata.contacts.data.ContactsFeed, 
+        auth_token=google_token)
     #feed = gd_client.GetContacts()
     PrintFeed(feed)    
     for i, entry in enumerate(feed.entry):
@@ -124,7 +127,7 @@ def linkedin_tokens():
         data = resp.content
         access_token = data['oauth_token']
         access_token_secret = data['oauth_token_secret']
-        session['access_token'] = access_token
+        session['linkedin_token'] = access_token
         session['access_token_secret'] = access_token_secret
         user_id = session['user_id']
         user = db_session.query(User).get(user_id)
@@ -181,7 +184,7 @@ def linkedin_connections():
     print li_connections
     print li_connections_employer
     user_id = session['user_id']
-    return render_template("index.html", li_connections=li_connections, 
+    return render_template("view_user_profile.html", li_connections=li_connections, 
         li_connections_employer=li_connections_employer, user_id=user_id)
 
 # Twitter OAuth
@@ -191,8 +194,8 @@ def linkedin_connections():
 #     request_token_url='https://api.twitter.com/oauth/request_token',
 #     access_token_url='https://api.twitter.com/oauth/access_token',
 #     authorize_url='https://api.twitter.com/oauth/authenticate',
-#     consumer_key='<your key here>',
-#     consumer_secret='<your secret here>')
+#     consumer_key='XFPd34xhEUFoAM8VayQzg',
+#     consumer_secret='iyFgMzQJERcrbeB3KMZbb6ddTXW8VtKgw5t6tIfMcQ')
 
 # def get_twitter_token(token=None):
 #     return session.get('twitter_token')
@@ -252,9 +255,12 @@ facebook_oauth = oauth.remote_app('facebook',
 def get_facebook_token():
     return session.get('facebook_token')
 
-def pop_login_session():
-    session.pop('logged_in', None)
+@app.route("/facebook_logout")
+def facebook_logout():
+    #session.pop('logged_in', None)
     session.pop('facebook_token', None)
+    user_id = session['user_id']
+    return render_template("view_user_profile.html", user_id=user_id)
 
 @app.route("/facebook_login")
 def facebook_login():
@@ -289,7 +295,7 @@ def facebook_friends():
     friend_list = [friend['name'] for friend in friends['data']]
     user_id = session['user_id']
     print friend_list
-    return render_template("index.html", friend_list=friend_list, user_id=user_id)
+    return render_template("view_user_profile.html", friend_list=friend_list, user_id=user_id)
 
 def check_names(friend_list, names_from_site, keywords, linkedin_connections, 
     linkedin_connections_employer):
@@ -432,6 +438,7 @@ def delete_user_keywords(keyword):
 @crossdomain(origin="*", headers=["X-Requested-With"])
 def receive_names(user_id):
     names_from_site = request.form.getlist("names[]")
+    # names_from_site = cleaning(names_from_site)
     friend_list = pulling_friends(user_id)
     linkedin_connections, linkedin_connections_employer = pulling_connections(user_id)
     keywords = json.loads(db_session.query(User).get(user_id).keywords)
@@ -440,6 +447,12 @@ def receive_names(user_id):
     print connections
     return jsonify(connections)
     
+# def cleaning(any_list):
+#     listed_name = any_list.split(,)
+#     if len(listed_name) == 0:
+#         continue
+#     elif len()
+
 def pulling_friends(user_id):
     facebook_token = db_session.query(User).get(user_id).facebook_token
     graph = facebook.GraphAPI(facebook_token)

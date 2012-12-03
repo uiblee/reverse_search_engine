@@ -1,18 +1,18 @@
 {% extends "layout.html" %}
 {% block body %}
-<h2> {{ username }}'s profile</h2>
+<h2>Accounts to search</h2>
 <p>
 <ul>
-    {% if not session.logged_in %}
+    {% if not session.facebook_token %}
     <li><a href="/facebook_login">Login with Facebook to search Facebook friends</a></li>
     {% else %}
-    <li><a href="/logout"> Facebook Logout</a></li>
+    <li><a href="/facebook_logout"> Facebook Logout</a></li>
     {% endif %}
 </ul>
 
 
 <ul>
-    {% if not session.logged_in %}
+    {% if not session.linkedin_token %}
     <li><a href="/linkedin_login">Login with LinkedIn to search LinkedIn contacts</a></li>
     {% else %}
     <li><a href="/logout"> LinkedIn Logout</a></li>
@@ -20,10 +20,10 @@
 </ul>
 
 <ul>
-    {% if not session.logged_in %}
+    {% if not session.google_token %}
     <li><a href="/google_login">Login with Google to search Google contacts</a></li>
     {% else %}
-    <li><a href="/logout"> Google Logout</a></li>
+    <li><a href="/google_logout"> Google Logout</a></li>
     {% endif %}
 </ul>
 </p>
@@ -37,7 +37,7 @@
     </form>
 
 <div>
-    <h3> Your keywords </h3>
+    <h2> Your keywords </h2>
     <table class="table table-striped">
     <thead>
         <tr>
