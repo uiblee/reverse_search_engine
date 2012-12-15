@@ -2,17 +2,18 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy.orm import sessionmaker, scoped_session
+import os
 
 # engine = create_engine('postgresql://localhost/search_engine', echo=False)
 
 # what i use for localhost
-engine = create_engine('postgresql://localhost/search_engine', echo=False)
-session = scoped_session(sessionmaker(bind=engine, autocommit = False, autoflush = False))
+#engine = create_engine('postgresql://localhost/search_engine', echo=False)
+#session = scoped_session(sessionmaker(bind=engine, autocommit = False, autoflush = False))
 
 #what i would need for heroku and change lines in main file
-# db_uri = os.environ.get("DATABASE_URL", 'postgresql://localhost:5432/search_engine')
-# engine = create_engine(db_uri, echo = False)
-# session = scoped_session(sessionmaker(bind=engine, autocommit=False, autoflush=False))
+db_uri = os.environ.get("DATABASE_URL", 'postgresql://localhost/search_engine')
+engine = create_engine(db_uri, echo = False)
+session = scoped_session(sessionmaker(bind=engine, autocommit=False, autoflush=False))
 
 Base = declarative_base()
 Base.query = session.query_property()
