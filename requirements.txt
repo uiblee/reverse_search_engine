@@ -21,6 +21,6 @@ oauth2client==1.0
 psycopg2==2.4.5
 python-gflags==2.0
 rauth==0.4.17
-requests==0.14.2
+requests==2.20.0
 urllib3==1.5
 wsgiref==0.1.2
